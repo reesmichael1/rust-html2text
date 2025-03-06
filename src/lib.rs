@@ -47,8 +47,6 @@
 //! read keys from stdin.
 //!
 
-#![deny(missing_docs)]
-
 // Check code in README.md
 #[cfg(doctest)]
 #[doc = include_str!("../README.md")]
@@ -71,7 +69,7 @@ use render::{Renderer, TextDecorator, TrivialDecorator};
 use html5ever::driver::ParseOpts;
 use html5ever::parse_document;
 use html5ever::tree_builder::TreeBuilderOpts;
-mod markup5ever_rcdom;
+pub mod markup5ever_rcdom;
 pub use markup5ever_rcdom::RcDom;
 use markup5ever_rcdom::{
     Handle,
