@@ -999,7 +999,7 @@ pub(crate) struct SubRenderer<D: TextDecorator> {
     /// a blank line if any other text is added.
     at_block_end: bool,
     wrapping: Option<WrappedBlock<Vec<D::Annotation>>>,
-    decorator: D,
+    pub decorator: D,
     ann_stack: Vec<D::Annotation>,
     text_filter_stack: Vec<fn(&str) -> Option<String>>,
     /// The depth of `<pre>` block stacking.
@@ -1976,6 +1976,8 @@ pub enum RichAnnotation {
     Default,
     /// A link with the target.
     Link(String),
+    /// A link with the target selected in the browser.
+    ActiveLink(String),
     /// An image with its src (this tag is attached to the title text)
     Image(String),
     /// Emphasised text, which might be rendered in bold or another colour.

@@ -14,7 +14,7 @@ pub use text_renderer::{
 pub(crate) type Result<T> = std::result::Result<T, TooNarrow>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub(crate) struct TooNarrow;
+pub struct TooNarrow;
 
 impl From<TooNarrow> for crate::Error {
     fn from(_: TooNarrow) -> crate::Error {
@@ -23,7 +23,7 @@ impl From<TooNarrow> for crate::Error {
 }
 
 /// A type which is a backend for HTML to text rendering.
-pub(crate) trait Renderer {
+pub trait Renderer {
     /// Add an empty line to the output (ie between blocks).
     fn add_empty_line(&mut self) -> Result<()>;
 

@@ -86,7 +86,7 @@ use std::io::Write;
 use std::iter::{once, repeat};
 
 #[derive(Debug, Copy, Clone, Default, PartialEq, Eq)]
-pub(crate) enum WhiteSpace {
+pub enum WhiteSpace {
     #[default]
     Normal,
     // NoWrap,
@@ -2394,7 +2394,7 @@ pub mod config {
 
     /// Configure the HTML processing.
     pub struct Config<D: TextDecorator> {
-        decorator: D,
+        pub decorator: D,
 
         max_wrap_width: Option<usize>,
 
@@ -2500,6 +2500,20 @@ pub mod config {
                     self.decorator.make_subblock_decorator(),
                 )?
                 .into_lines()
+        }
+
+        pub fn render_to_lines_and_dec(
+            &self,
+            render_tree: RenderTree,
+            width: usize,
+        ) -> Result<(Vec<TaggedLine<Vec<D::Annotation>>>, D)> {
+            render_tree
+                .render_with_context(
+                    &mut self.make_context(),
+                    width,
+                    self.decorator.make_subblock_decorator(),
+                )?
+                .into_lines_and_dec()
         }
 
         /// Reads HTML from `input`, and returns a `String` with text wrapped to
@@ -2782,6 +2796,18 @@ impl<D: TextDecorator> RenderedText<D> {
             .into_iter()
             .map(RenderLine::into_tagged_line)
             .collect())
+    }
+
+    fn into_lines_and_dec(self) -> Result<(Vec<TaggedLine<Vec<D::Annotation>>>, D)> {
+        let other = self.0.decorator.make_subblock_decorator();
+        Ok((
+            self.0
+                .into_lines()?
+                .into_iter()
+                .map(RenderLine::into_tagged_line)
+                .collect(),
+            other,
+        ))
     }
 }
 
